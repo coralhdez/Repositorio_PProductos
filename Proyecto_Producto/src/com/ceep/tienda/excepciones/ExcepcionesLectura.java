@@ -1,11 +1,9 @@
-
 package com.ceep.tienda.excepciones;
 
+public class ExcepcionesLectura extends ExcepcionesAccesoDatos {
 
-public class ExcepcionesLectura extends ExcepcionesDatos {
-
-    public ExcepcionesLectura(String mensaje) {
-        super(mensaje);
+    public ExcepcionesLectura(String message) {
+        super(message);
     }
-    
+
 }

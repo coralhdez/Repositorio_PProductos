@@ -19,12 +19,16 @@ public interface ICatalogoProductos {
     String iniciarCatalogo(String nombreRecurso);
     
     String listarProducto(String nombreRecurso);   
+    
+    String mostrarPorductoID(String nombreRecurso, int id); 
     //buscar un producto en el catálogo
     String buscarProducto(String nombreRecurso, String buscar);
-    
+        
     String borrarCatalogo(String nombreRecurso);
     
     void borrarProducto(String nombreRecurso);
+    
+   
     
     
 }

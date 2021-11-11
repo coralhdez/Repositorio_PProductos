@@ -23,7 +23,9 @@ public interface IAccesoDatos {
     void escribirProducto(Producto producto, String nombreArchivo, boolean anexar) throws ExcepcionesEscritura; //añadir productos
 
     int buscarProductoSimple(String buscar, String nombreArchivo) throws ExcepcionesLectura;
-
+    
+    Producto buscarProductoID(String nombreRecurso, int id)throws ExcepcionesLectura;
+    
     void borrarProducto(String nombreArchivo, String nombreArticuloABorrar) throws ExcepcionesAccesoDatos;
 
     String borrarRecurso(String nomreArchivo);

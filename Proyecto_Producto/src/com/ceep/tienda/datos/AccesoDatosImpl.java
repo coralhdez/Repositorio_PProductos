@@ -3,8 +3,11 @@ package com.ceep.tienda.datos;
 import com.ceep.tienda.excepciones.*;
 import com.ceep.tienda.dominio.Producto;
 import java.io.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class AccesoDatosImpl implements IAccesoDatos {
@@ -12,7 +15,7 @@ public class AccesoDatosImpl implements IAccesoDatos {
     @Override
     public boolean existeRecurso(String nombreArchivo) {
         File archivo = new File(nombreArchivo);
-        return archivo.exists(); //devuelve boolean
+        return archivo.exists(); //devuelve 
     }
 
     @Override
@@ -125,6 +128,7 @@ public class AccesoDatosImpl implements IAccesoDatos {
         return contador; // mensaje
 
     }
+    
 
     @Override
     public String borrarRecurso(String nombreArchivo) {
@@ -174,99 +178,37 @@ public class AccesoDatosImpl implements IAccesoDatos {
         }
 
     }
-//mismos metodos de la interfaz
-    // define el cuerpo de todos los métodos abstractos
-    //instanciar objeto de tipo file para poder trabajar ocn el
 
-//    @Override
-//    public double CalcularPrecioTotal(String nombreArchivo) {    
-//        //LEO TODAS LAS LINEAS DE MI FICHERO
-//        //EN CADA LINEA CREO UN OBJETO DE TIPO PRODUCTO Y LO METO EN UN LISTADO
-//        //Archivo
-//        File archivo = new File(nombreArchivo); 
-//        double total = 0.0;
-//        String[] producto = new String[5]; //idProducto, nombre, precio, cantidad, fecha
-//
-//        try {
-//            //Declaro variable para entrar al archivo
-//            BufferedReader entrada = new BufferedReader(new FileReader(archivo)); //Para que no se sobreescriba
-//            String lectura = null; // lectura = nombre;cantidad;precio;fecha
-//
-//            while ((lectura = entrada.readLine()) != null) {
-//                producto = lectura.split(";"); // producto = {nombre, cantidad, precio, fecha}  lectura = nombre;cantidad;precio;fecha      
-//                //en cada split que hago cojo el precio
-//                //como el split me devuelve String, lo parseo a double
-//                total += Double.parseDouble(producto[3]);
-//            }
-//            entrada.close();
-//        } catch (Exception e) {
-//            e.printStackTrace(System.out);
-//            try {
-//                throw new ExcepcionesLectura("Error de lectura listando los productos");
-//            } catch (ExcepcionesLectura ex) {
-//            }
-//        }
-//        return total;
-//    }  
-//    @Override
-//    public int contadorArticulos(String nombreArchivo) throws ExcepcionesLectura {
-//        //LEO TODAS LAS LINEAS DE MI FICHERO
-//        //EN CADA LINEA CREO UN OBJETO DE TIPO PRODUCTO Y LO METO EN UN LISTADO
-//        //Archivo
-//        File archivo = new File(nombreArchivo); 
-//        int contador = 0;
-//        String[] producto = new String[5]; //idProducto, nombre, precio, cantidad, fecha
-//
-//        try {
-//            //Declaro variable para entrar al archivo
-//            BufferedReader entrada = new BufferedReader(new FileReader(archivo)); //Para que no se sobreescriba
-//            String lectura = null; // lectura = nombre;cantidad;precio;fecha
-//
-//            while ((lectura = entrada.readLine()) != null) {
-//                producto = lectura.split(";"); // producto = {nombre, cantidad, precio, fecha}  lectura = nombre;cantidad;precio;fecha      
-//
-//                contador ++;
-//            }
-//            entrada.close();
-//        } catch (Exception e) {
-//            e.printStackTrace(System.out);
-//            try {
-//                throw new ExcepcionesLectura("Error de lectura de los productos");
-//            } catch (ExcepcionesLectura ex) {
-//            }
-//        }
-//        return contador;
-//    }
-//
-//    @Override
-//    public double maxPrecioArticulo(String nombreArchivo) throws ExcepcionesLectura {         
-//        //LEO TODAS LAS LINEAS DE MI FICHERO
-//        //EN CADA LINEA CREO UN OBJETO DE TIPO PRODUCTO Y LO METO EN UN LISTADO
-//        //Archivo
-//        File archivo = new File(nombreArchivo); 
-//        double max = 0;
-//        String[] producto = new String[5]; //idProducto, nombre, precio, cantidad, fecha
-//
-//        try {
-//            //Declaro variable para entrar al archivo
-//            BufferedReader entrada = new BufferedReader(new FileReader(archivo)); //Para que no se sobreescriba
-//            String lectura = null; // lectura = nombre;cantidad;precio;fecha
-//
-//            while ((lectura = entrada.readLine()) != null) {
-//                producto = lectura.split(";"); // producto = {nombre, cantidad, precio, fecha}  lectura = nombre;cantidad;precio;fecha      
-//                if(Double.parseDouble(producto[3]) > max) {
-//                    max = Double.parseDouble(producto[3]);
-//                }              
-//            }
-//            entrada.close();
-//        } catch (Exception e) {
-//            e.printStackTrace(System.out);
-//            try {
-//                throw new ExcepcionesLectura("Error de lectura de los productos");
-//            } catch (ExcepcionesLectura ex) {
-//            }
-//        }
-//        return max;
-//    }
-//    
+    @Override
+    public Producto buscarProductoID(String nombreRecurso, int id) throws ExcepcionesLectura {
+        File archivo = new File(nombreRecurso);
+        String[] productoTxt = new String[5];
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+        
+        Producto producto = null;
+        try { 
+            BufferedReader entrada = new BufferedReader(new FileReader(archivo));
+            String lectura = null;
+            
+              while ((lectura = entrada.readLine()) != null) {
+                productoTxt = lectura.split(";");
+                if (id == Integer.parseInt(productoTxt[0])) { //nombreProducto
+                     producto = new Producto(Integer.parseInt(productoTxt[0]), productoTxt[1], Double.parseDouble(productoTxt[2]), Integer.parseInt(productoTxt[3]), formatoFecha.parse(productoTxt[4]));
+                    break;
+                }
+            }
+            
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace(System.out);
+        }catch(IOException e){
+            e.printStackTrace(System.out);
+        }catch(ParseException e){
+             e.printStackTrace(System.out);
+        }
+        
+        return producto;
+    }
+
+
+    
 }

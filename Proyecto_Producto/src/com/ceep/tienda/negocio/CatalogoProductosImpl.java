@@ -170,4 +170,24 @@ public class CatalogoProductosImpl implements ICatalogoProductos {
         System.out.println("Artículo borrado con éxito");
     }
 
+    @Override
+    public String mostrarPorductoID(String nombreRecurso, int id) {
+         List<Producto> arrayProductos = new ArrayList<>();
+        try {
+            arrayProductos = this.datos.listarRecurso(nombreRecurso);
+            for (int i = 0; i < arrayProductos.size(); i++) {
+                if(arrayProductos.get(i).getIdProducto() == id){
+                    arrayProductos.get(i).toString();
+                break;    
+                }
+            }
+            
+        } catch (ExcepcionesLectura ex) {
+            
+        }
+        return "Producto";
+    }
+
+  
+
 }
